@@ -1,3 +1,3 @@
-A directory for misellaneous stuff
-Nothing really relevant should be here!
+# Misc
+Files that do not directly relate to the other directories will go here.
 
