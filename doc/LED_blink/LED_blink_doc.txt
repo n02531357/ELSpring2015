@@ -1,0 +1,10 @@
+Name: LED_blink.py
+Date: 1/31/2015
+Author: Charles Palsa
+
+Purpose: Python script to send signal to bread board and activate attached LED.
+
+Definitions:
+
+Blink()
+Causes LED to blink three times at 1 second intervals when called.
