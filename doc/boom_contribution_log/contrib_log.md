@@ -13,3 +13,6 @@
 				* Assigned tasks to Jose and Shamiul 
 				* Jose is to come up with a script that can store metadata and path data of pictures in a database. 
 				* Shamiul is to familiarize with bootstrap and build the UI for camera and motor controls. 
+				
+#### Date: March 24th, 2015
+###### Actions:
