@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> 
   <meta charset="utf-8">
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
   <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
@@ -58,28 +60,66 @@
 			<div id="feed-status" class="panel panel-success" style="text-align: center;">
 			  <div class="panel-heading" style="text-align: center;">Video Feed</div>
 			  <div class="panel-body" style="text-align: center;">
-			    <img id="feed" onerror="displayOffline()" src="http://localhost:8081">
+			    <img id="feed" onerror="displayOffline()" src="http://192.168.1.4:8081">
+			    <br><div id='timer'></div><br>
+			    <button class="btn btn-default" onclick="takePic()"><span class="glyphicon glyphicon-camera"></span></button>
+			    <button class="btn btn-default" onclick="refreshFeed()"><span class="glyphicon glyphicon-refresh"></span></button>
+			    <br>
 			  </div>			
 			</div>
 		</div>
 	</div>
 	
 	<div id='control-panel' class='row'>
-		<div id="camera_controls" class="col-md-4">
-			<div class="panel panel-primary" style="text-align: center;">
-			  <div class="panel-heading" style="text-align: center;"><h4 class="panel-title">Camera Controls</h4></div>
-			  <div class="panel-body">
-			    <button type="button" class="btn btn-success btn-lg">Take a Picture!</button>
-			    <button type="button" class="btn btn-success btn-lg">Record!</button>
-			  </div>			
-			</div>
-		</div>
-		<div id="motor_controls" class="col-md-8">
+		<div id="motor_controls">
 			<div class="panel panel-primary" style="text-align: center;">
 			  <div class="panel-heading" style="text-align: center;"><h4 class="panel-title">Motor Controls</h4></div>
 			  <div class="panel-body">
-			    Control buttons, and direct angle form to be added
-			  </div>			
+				<div class="container" style="text-align: center;">
+				  <h2>Move Camera</h2>
+				  <p>Use the fields below to move the camera or use the arrows</p>
+				  <form class="form-inline" role="form">
+				    <div class="form-group">
+				      <label for="motor1">Motor1:</label>
+				      <input type="text" size="5" class="form-control" id="motor1" placeholder="0">
+				    </div>
+				    <div class="form-group">
+				      <label for="motor2"> Motor2:</label>
+				      <input type="text"  size="5" class="form-control" id="motor2" placeholder="0">
+				    </div>
+				    <div class="form-group">
+				      <label for="motor3"> Motor3:</label>
+				      <input type="text" size="5" class="form-control" id="motor3" placeholder="0">
+				    </div>
+				    <a href="#" class="btn btn-sm btn-primary" onclick="moveCamera()">Move</a>		
+				    <a href="#" class="btn btn-sm btn-primary" onclick="resetMotors()">Reset</a>
+				  </form>
+				</div>			
+				<br>
+				<div class="row">
+				<div class="col-sm-5" style="background-color:white;"></div>
+	              <div class="col-md-2">
+	                <dl>
+  						<dd><a href="#" class="btn btn-primary btn-lg" onclick="moveYUp()"><span class="glyphicon glyphicon-menu-up"></span> </a></dd>
+    				</dl>
+    				<dl>	
+    					<dd><a href="#" class="btn btn-primary btn-lg" onclick="moveXLeft()"><span class="glyphicon glyphicon-menu-left"></span> </a>
+    					<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+    					<a href="#" class="btn btn-primary btn-lg" onclick="moveXRight()"><span class="glyphicon glyphicon-menu-right"></span> <a></dd>
+    				</dl>
+    				<dl>	
+    					<dd><a href="#" class="btn btn-primary btn-lg" onclick="moveYDown()"><span class="glyphicon glyphicon-menu-down"></span> </a></dd>
+  					</dl>
+				  </div>
+				  <div class="col-md-1">
+				     <dl>
+  						<dd><a href="#" class="btn btn-primary btn-lg" onclick="moveZUp()"><span class="glyphicon glyphicon-menu-up"></span> </a></dd>
+    				</dl>
+      				<dl>	
+    					<dd><a href="#" class="btn btn-primary btn-lg" onclick="moveZDown()"><span class="glyphicon glyphicon-menu-down"></span> </a></dd>
+  					</dl>
+				  </div>
+				  </div>			
 			</div>
 		</div>				
 	</div>	
@@ -89,18 +129,121 @@
 	     <p>&copy; Copyright  by Charles</p>
 	    </footer>
 	</div>    
-  </div>
+  </div> 
 <script type="text/javascript">
+var count = 10;
+var counter;
+
+function moveXUp()
+{
+	$.ajax({ url: 'ELSpring2015/code/boom_web/control_camera.php',
+		     data: {direction: 'xup'},
+			 type: 'post'
+			});
+}
+
+function moveXDown()
+{
+	$.ajax({ url: 'ELSpring2015/code/boom_web/control_camera.php',
+	     data: {direction: 'xdown'},
+		 type: 'post'
+		});
+}
+
+function moveYDown()
+{
+		$.ajax({ url: 'ELSpring2015/code/boom_web/control_camera.php',
+	     data: {direction: 'ydown'},
+		 type: 'post'
+		});
+}
+
+function moveYUp()
+{
+		$.ajax({ url: 'ELSpring2015/code/boom_web/control_camera.php',
+	     data: {direction: 'yup'},
+		 type: 'post'
+		});
+}
+
+function moveZDown()
+{
+	$.ajax({ url: 'ELSpring2015/code/boom_web/control_camera.php',
+	     data: {direction: 'zdown'},
+		 type: 'post'
+		});
+}
+
+function moveZUp()
+{
+	$.ajax({ url: 'ELSpring2015/code/boom_web/control_camera.php',
+	     data: {direction: 'zup'},
+		 type: 'post'
+		});
+}
+
+function resetMotors()
+{
+	$.ajax({ url: './move_camera.php',
+		 data: {
+		 	motor1: 0,
+      		motor2: 0,
+      		motor3: 0
+		 },
+		 type: 'post'
+		});
+}
+
+function moveCamera()
+{
+	$.ajax({ url: './move_camera.php',
+			 data: {
+			 	motor1: document.getElementById("motor1").value,
+	          		motor2: document.getElementById("motor2").value,
+	          		motor3: document.getElementById("motor3").value
+			 },
+			 type: 'post'
+			});
+}
+
 function displayOffline(){
 	var feed_status = document.getElementById("feed-status");
 	feed_status.className = "panel panel-danger";
-	alert(feed_status.className);
 	var feed_source = document.getElementById("feed");
 	feed_source.src = "http://cs.newpaltz.edu/~n02531357/ELSpring15/unplugged.png";
-	
+	count=5;
+	counter = setInterval(startTimer, 1000);	
+}
+function displayWorking(){
+	var feed_status = document.getElementById("feed-status");
+	feed_status.className = "panel panel-warning";
+	var feed_source = document.getElementById("feed");
+	feed_source.src = "./loading_spinner.gif";	
+}
+function refreshFeed(){
+	var feed_status = document.getElementById("feed-status");
+	feed_status.className = "panel panel-success";
+	var feed_source = document.getElementById("feed");
+	feed_source.src = "http://192.168.1.4:8081";	
+}
+function startTimer(){
+	count--;
+	var timerText = document.getElementById("timer");
+	timerText.innerHTML="Hold still!Refresh in " + count;
+	if(count <=0){
+		clearInterval(counter);
+		count=10;
+		timerText.innerHTML="";
+		refreshFeed();
+		return;
+	}
+}
+function takePic(){	
+	displayWorking();
+	$.post("./take_pic.php");
+	counter = setInterval(startTimer, 1000);
+	return false;
 }
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>  
 </body>
 </html>
