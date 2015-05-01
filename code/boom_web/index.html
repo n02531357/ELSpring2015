@@ -205,41 +205,41 @@ function moveCamera()
 			});
 }
 
-function displayOffline(){
+function displayOffline(){ //If the feed img tag returns an error, display this image
 	var feed_status = document.getElementById("feed-status");
 	feed_status.className = "panel panel-danger col-md-6";
 	var feed_source = document.getElementById("feed");
 	feed_source.src = "http://cs.newpaltz.edu/~n02531357/ELSpring15/unplugged.png";
 }
-function displayWorking(){
+function displayWorking(){ //during image capture, display "working" to the user to show that a picture is being taken
 	var feed_status = document.getElementById("feed-status");
 	feed_status.className = "panel panel-warning col-md-6";
 	var feed_source = document.getElementById("feed");
 	feed_source.src = "./loading_spinner.gif";	
 }
-function refreshFeed(){
+function refreshFeed(){ //Refreshes the feed by changing the source back to the server location
 	var feed_status = document.getElementById("feed-status");
 	feed_status.className = "panel panel-success col-md-6";
 	var feed_source = document.getElementById("feed");
 	feed_source.src = "http://137.140.113.251:8081";	
 }
-function startTimer(){
+function startTimer(){ //Timer until auto refresh occurs
 	count--;
 	var timerText = document.getElementById("timer");
-	timerText.innerHTML="Hold still!Refresh in " + count;
+	timerText.innerHTML="Hold still! Refresh in " + count;
 	if(count <=0){
-		clearInterval(counter);
+		clearInterval(counter); //stop running startTimer method
 		count=10;
 		timerText.innerHTML="";
 		refreshFeed();
 		return;
 	}
 }
-function takePic(){	
+function takePic(){//display notification to user that a picture is being captured	
 	displayWorking();
-	$.post("./take_pic.php");
-	counter = setInterval(startTimer, 1000);
-	return false;
+	$.post("./take_pic.php");//runs PHP script that runs camera function
+	counter = setInterval(startTimer, 1000); //Runs the startTimer method every 1000ms
+	return false; //allows function to post without refreshing page
 }
 </script>
 </body>
